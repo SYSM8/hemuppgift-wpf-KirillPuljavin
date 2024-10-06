@@ -10,174 +10,163 @@
     mc:Ignorable="d">
 
     <Grid Background="Beige">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="4*" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <!--  Dice Roll  -->
+        <!--  Title Segment  -->
         <StackPanel
-            Grid.Column="0"
+            Grid.Row="0"
             Margin="20"
-            VerticalAlignment="Top">
+            HorizontalAlignment="Center">
             <Label
-                Margin="0,0,0,20"
-                HorizontalAlignment="Center"
-                Content="Dice Roll"
-                FontSize="24"
+                Content="Yatzy Game"
+                FontSize="36"
                 FontWeight="Bold"
                 Foreground="Black" />
-            <!--  Placeholder for dice roll controls and graphics  -->
         </StackPanel>
 
-        <!--  Score Table  -->
-        <ScrollViewer
-            Grid.Column="1"
-            Margin="20"
-            VerticalScrollBarVisibility="Auto">
-            <Grid Background="Beige" ShowGridLines="True">
-                <Grid.ColumnDefinitions>
-                    <!--  Left Header for Score Actions  -->
-                    <ColumnDefinition Width="2*" />
-                    <!--  Dynamic Columns for Each Player  -->
-                    <ColumnDefinition Width="*" SharedSizeGroup="Player" />
-                </Grid.ColumnDefinitions>
+        <!--  Content Segment  -->
+        <Grid Grid.Row="1" Background="Beige">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <!--  Header Row for Player Names  -->
-                    <RowDefinition Height="Auto" />
-                    <!--  Rows for Scores  -->
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <!--  Dice Roll  -->
+            <StackPanel
+                Grid.Column="0"
+                Margin="20"
+                VerticalAlignment="Top">
+                <Label
+                    Margin="0,0,0,20"
+                    HorizontalAlignment="Center"
+                    Content="Dice Roll"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Foreground="Black" />
+                <!--  Placeholder for dice roll controls and graphics  -->
+            </StackPanel>
 
-                <!--  Score Actions Headers (Left Column)  -->
-                <TextBlock
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Margin="5"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="Doubles" />
-                <TextBlock
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Margin="5"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="Three of a Kind" />
-                <TextBlock
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    Margin="5"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="Four of a Kind" />
-                <TextBlock
-                    Grid.Row="4"
-                    Grid.Column="0"
-                    Margin="5"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="Full House" />
-                <TextBlock
-                    Grid.Row="5"
-                    Grid.Column="0"
-                    Margin="5"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="Small Straight" />
-                <TextBlock
-                    Grid.Row="6"
-                    Grid.Column="0"
-                    Margin="5"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="Large Straight" />
-                <TextBlock
-                    Grid.Row="7"
-                    Grid.Column="0"
-                    Margin="5"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="Yatzy" />
-                <TextBlock
-                    Grid.Row="8"
-                    Grid.Column="0"
-                    Margin="5"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="Chance" />
+            <!--  Score Table  -->
+            <DataGrid
+                Grid.Column="1"
+                Margin="20"
+                AutoGenerateColumns="False"
+                Background="Beige"
+                BorderBrush="Gray"
+                BorderThickness="1"
+                HeadersVisibility="All"
+                IsReadOnly="True"
+                ItemsSource="{Binding Players}">
+                <!--  Player Names as Row Headers  -->
+                <DataGrid.RowHeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontWeight="Bold"
+                            Foreground="Black"
+                            Text="{Binding Name}" />
+                    </DataTemplate>
+                </DataGrid.RowHeaderTemplate>
 
-                <!--  Player Headers  -->
-                <ItemsControl
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    ItemsSource="{Binding Players}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Margin="5"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Foreground="Black"
-                                Text="{Binding Name}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <!--  Player Scores  -->
-                <ItemsControl
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    ItemsSource="{Binding Players}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Margin="5" Orientation="Vertical">
-                                <ItemsControl ItemsSource="{Binding ScoreCard}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock
-                                                Margin="5"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                FontSize="14"
-                                                Foreground="Black"
-                                                Text="{Binding}" />
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
-        </ScrollViewer>
+                <!--  Score Categories as Column Headers  -->
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="*" Header="Doubles">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Content="{Binding Path=ScoreCard[0]}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*" Header="Three of a Kind">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Content="{Binding Path=ScoreCard[1]}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*" Header="Four of a Kind">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Content="{Binding Path=ScoreCard[2]}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*" Header="Full House">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Content="{Binding Path=ScoreCard[3]}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*" Header="Small Straight">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Content="{Binding Path=ScoreCard[4]}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*" Header="Large Straight">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Content="{Binding Path=ScoreCard[5]}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*" Header="Yatzy">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Content="{Binding Path=ScoreCard[6]}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*" Header="Chance">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Content="{Binding Path=ScoreCard[7]}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding TotalScore}"
+                        Header="Total Score" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </Page>

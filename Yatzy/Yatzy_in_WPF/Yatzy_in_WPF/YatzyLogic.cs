@@ -1,30 +1,45 @@
-﻿
-
-
-
-
-
-
-
-
-
-namespace Yatzy_in_WPF
+﻿namespace Yatzy_in_WPF
 {
     internal static class YatzyLogic
     {
         public class Player
         {
-            public static string Name { get; set; }
-            public static int[] ScoreCard { get; set; }
-            public static int TotalScore { get; set; }
-            public static int Bonus { get; set; }
-            public static int TotalBonus { get; set; }
-            public static int GrandTotal { get; set; }
+            public string Name { get; set; }
+            public int[] ScoreCard = new int[15]; // This is the score list of the player
+            public int TotalScore { get; set; } // This is the total score of the player
+            public int Bonus { get; set; }
+            public int TotalBonus { get; set; }
+            public int GrandTotal { get; set; } // This is the total score of the player including bonus
+            public Player(string name)
+            {
+                Name = name;
+            }
         }
 
-        private static Player[] players;
+        public static class GameManager
+        {
+            public static List<Player> Players { get; set; } = new List<Player>();
+            private const int WinningScore = 100; // Winning score threshold
 
-        public static Player[] Players { get => players; set => players = value; }
+            public static void InitializeGame(int numberOfPlayers)
+            {
+                Players.Clear(); // Clear the list in case it's a new game
+
+                for (int i = 0; i < numberOfPlayers; i++)
+                {
+                    Players.Add(new Player($"Player {i + 1}"));
+                }
+            }
+
+            public static void GameLoop()
+            {
+                // While (any of the Players GrandTotal value is BELOW winning value of 100)
+                while (Players.All(player => player.GrandTotal < WinningScore))
+                {
+                    // Game is running
+                }
+            }
+        }
 
         public static int CalculateScore(int[] dice, int category)
         {

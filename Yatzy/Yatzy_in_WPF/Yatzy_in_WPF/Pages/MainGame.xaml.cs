@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using static Yatzy_in_WPF.YatzyLogic;
 
 namespace Yatzy_in_WPF.Pages
 {
-    /// <summary>
-    /// Interaction logic for MainGame.xaml
-    /// </summary>
     public partial class MainGame : Page
     {
         public MainGame()
         {
             InitializeComponent();
+            GameManager.InitializeGame(2); // Initialize game with 2 players
+            Players = new ObservableCollection<YatzyLogic.Player>
+            {
+                new("Test Player 1") { TotalScore = 100, GrandTotal = 150 },
+                new("Test Player 2") { TotalScore = 120, GrandTotal = 150 }
+            };
+            DataContext = this;
+
+            foreach (Player player in Players)
+            {
+                player.ScoreCard = new int[15];
+            }
         }
+
+        public ObservableCollection<YatzyLogic.Player> Players { get; set; }
     }
 }

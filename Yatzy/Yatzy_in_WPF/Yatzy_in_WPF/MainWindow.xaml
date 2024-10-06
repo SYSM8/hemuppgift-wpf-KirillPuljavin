@@ -11,6 +11,9 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Frame Name="MainFrame" NavigationUIVisibility="Hidden" />
+        <Frame
+            Name="MainFrame"
+            Margin="-1062,-72,1062,72"
+            NavigationUIVisibility="Hidden" />
     </Grid>
 </Window>

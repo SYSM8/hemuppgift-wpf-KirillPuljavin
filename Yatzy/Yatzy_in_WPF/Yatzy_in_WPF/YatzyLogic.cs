@@ -1,6 +1,6 @@
 ﻿namespace Yatzy_in_WPF
 {
-    internal static class YatzyLogic
+    public static class YatzyLogic
     {
         public class Player
         {
@@ -10,15 +10,24 @@
             public int Bonus { get; set; }
             public int TotalBonus { get; set; }
             public int GrandTotal { get; set; }
-            public Player(string name) => Name = name;
+            public Player(string name)
+            {
+                Name = name;
+                ScoreCard = new int[15];
+                TotalScore = 0;
+                Bonus = 0;
+                TotalBonus = 0;
+                GrandTotal = 0;
+            }
         }
 
         public static class GameManager
         {
             public static List<Player> Players { get; set; } = new List<Player>();
             public static int currentPlayerIndex = 0;
-            public const int winningScore = 100;
-            public static int[] dice = new int[5];
+            public const int WinningScore = 100;
+            public const int BonusThreshold = 63;
+            public const int BonusPoints = 50;
 
             public static void InitializeGame(int numberOfPlayers)
             {
@@ -33,6 +42,7 @@
             public static int[] RollDice()
             {
                 Random random = new Random();
+                int[] dice = new int[5];
                 for (int i = 0; i < 5; i++)
                 {
                     dice[i] = random.Next(1, 7);
@@ -43,15 +53,19 @@
             public static void OnScoreButtonClick(int[] dice, int category)
             {
                 int score = CalculateScore(dice, category);
-                Players[currentPlayerIndex].ScoreCard[category - 1] = score;
-                Players[currentPlayerIndex].TotalScore += score;
+                if (Players[currentPlayerIndex].ScoreCard[category - 1] == 0)
+                {
+                    Players[currentPlayerIndex].ScoreCard[category - 1] = score;
+                    Players[currentPlayerIndex].TotalScore += score;
+                }
+                CalculateBonus(Players[currentPlayerIndex]);
                 Players[currentPlayerIndex].GrandTotal = Players[currentPlayerIndex].TotalScore + Players[currentPlayerIndex].TotalBonus;
                 EndTurn();
             }
 
             public static void EndTurn()
             {
-                if (Players[currentPlayerIndex].GrandTotal >= winningScore)
+                if (Players[currentPlayerIndex].GrandTotal >= WinningScore)
                 {
                     System.Windows.MessageBox.Show($"Game Over! {Players[currentPlayerIndex].Name} wins!");
                     return;
@@ -59,6 +73,16 @@
 
                 currentPlayerIndex = (currentPlayerIndex + 1) % Players.Count;
                 System.Windows.MessageBox.Show($"It's {Players[currentPlayerIndex].Name}'s turn!");
+            }
+
+            private static void CalculateBonus(Player player)
+            {
+                int upperSectionScore = player.ScoreCard.Take(6).Sum();
+                if (upperSectionScore >= BonusThreshold && player.Bonus == 0)
+                {
+                    player.Bonus = BonusPoints;
+                    player.TotalBonus = player.Bonus;
+                }
             }
         }
 

@@ -7,7 +7,9 @@ namespace Yatzy_in_WPF
     {
         public MainWindow()
         {
+            // Initialize the Game
             InitializeComponent();
+            YatzyLogic.GameManager.InitializeGame(2);
             MainFrame.NavigationService.Navigate(new MainGame());
         }
     }

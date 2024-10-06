@@ -10,12 +10,33 @@
     d:DesignWidth="1920"
     mc:Ignorable="d">
 
-    <Grid>
-        <!--  Score Table  -->
+    <Grid Background="SlateGray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <!--  Dice Table  -->
-
-        <!--  Pause Menu  -->
-
+        <!--  Simplified Score Table  -->
+        <StackPanel
+            Grid.Row="0"
+            Margin="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
+            <ItemsControl ItemsSource="{Binding Players}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            Margin="10"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="{Binding Name}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
     </Grid>
 </Page>

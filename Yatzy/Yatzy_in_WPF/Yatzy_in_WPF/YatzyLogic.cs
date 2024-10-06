@@ -1,24 +1,74 @@
-﻿namespace Yatzy_in_WPF
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace Yatzy_in_WPF
 {
     public static class YatzyLogic
     {
-        public class Player
+        public class Player : INotifyPropertyChanged
         {
-            public string Name { get; set; }
-            public int[] ScoreCard = new int[15];
-            public int TotalScore { get; set; }
-            public int Bonus { get; set; }
-            public int TotalBonus { get; set; }
-            public int GrandTotal { get; set; }
+            private string _name;
+            private int _totalScore;
+            private int _totalBonus;
+            private int _grandTotal;
+            private int _bonus;
+
+            public string Name
+            {
+                get => _name;
+                set
+                {
+                    _name = value;
+                    OnPropertyChanged();
+                }
+            }
+            public int TotalScore
+            {
+                get => _totalScore;
+                set
+                {
+                    _totalScore = value;
+                    OnPropertyChanged();
+                }
+            }
+            public int TotalBonus
+            {
+                get => _totalBonus;
+                set
+                {
+                    _totalBonus = value;
+                    OnPropertyChanged();
+                }
+            }
+            public int GrandTotal
+            {
+                get => _grandTotal;
+                set
+                {
+                    _grandTotal = value;
+                    OnPropertyChanged();
+                }
+            }
+            public int Bonus
+            {
+                get => _bonus;
+                set
+                {
+                    _bonus = value;
+                    OnPropertyChanged();
+                }
+            }
+            public int[] ScoreCard { get; set; }
+
             public Player(string name)
             {
                 Name = name;
                 ScoreCard = new int[15];
-                TotalScore = 0;
-                Bonus = 0;
-                TotalBonus = 0;
-                GrandTotal = 0;
             }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public static class GameManager

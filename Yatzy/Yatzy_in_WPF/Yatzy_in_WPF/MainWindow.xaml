@@ -13,7 +13,9 @@
     <Grid>
         <Frame
             Name="MainFrame"
-            Margin="-1062,-72,1062,72"
+            Margin="10"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
             NavigationUIVisibility="Hidden" />
     </Grid>
 </Window>

@@ -5,25 +5,24 @@
         public class Player
         {
             public string Name { get; set; }
-            public int[] ScoreCard = new int[15]; // This is the score list of the player
-            public int TotalScore { get; set; } // This is the total score of the player
+            public int[] ScoreCard = new int[15];
+            public int TotalScore { get; set; }
             public int Bonus { get; set; }
             public int TotalBonus { get; set; }
-            public int GrandTotal { get; set; } // This is the total score of the player including bonus
-            public Player(string name)
-            {
-                Name = name;
-            }
+            public int GrandTotal { get; set; }
+            public Player(string name) => Name = name;
         }
 
         public static class GameManager
         {
             public static List<Player> Players { get; set; } = new List<Player>();
-            private const int WinningScore = 100; // Winning score threshold
+            public static int currentPlayerIndex = 0;
+            public const int winningScore = 100;
+            public static int[] dice = new int[5];
 
             public static void InitializeGame(int numberOfPlayers)
             {
-                Players.Clear(); // Clear the list in case it's a new game
+                Players.Clear();
 
                 for (int i = 0; i < numberOfPlayers; i++)
                 {
@@ -31,13 +30,35 @@
                 }
             }
 
-            public static void GameLoop()
+            public static int[] RollDice()
             {
-                // While (any of the Players GrandTotal value is BELOW winning value of 100)
-                while (Players.All(player => player.GrandTotal < WinningScore))
+                Random random = new Random();
+                for (int i = 0; i < 5; i++)
                 {
-                    // Game is running
+                    dice[i] = random.Next(1, 7);
                 }
+                return dice;
+            }
+
+            public static void OnScoreButtonClick(int[] dice, int category)
+            {
+                int score = CalculateScore(dice, category);
+                Players[currentPlayerIndex].ScoreCard[category - 1] = score;
+                Players[currentPlayerIndex].TotalScore += score;
+                Players[currentPlayerIndex].GrandTotal = Players[currentPlayerIndex].TotalScore + Players[currentPlayerIndex].TotalBonus;
+                EndTurn();
+            }
+
+            public static void EndTurn()
+            {
+                if (Players[currentPlayerIndex].GrandTotal >= winningScore)
+                {
+                    System.Windows.MessageBox.Show($"Game Over! {Players[currentPlayerIndex].Name} wins!");
+                    return;
+                }
+
+                currentPlayerIndex = (currentPlayerIndex + 1) % Players.Count;
+                System.Windows.MessageBox.Show($"It's {Players[currentPlayerIndex].Name}'s turn!");
             }
         }
 
@@ -97,24 +118,7 @@
 
         private static int CalculateYatzy(int[] dice)
         {
-            int score = 0;
-            for (int i = 6; i > 0; i--)
-            {
-                int count = 0;
-                foreach (int die in dice)
-                {
-                    if (die == i)
-                    {
-                        count++;
-                    }
-                }
-                if (count == 5)
-                {
-                    score = 50;
-                    break;
-                }
-            }
-            return score;
+            return dice.Distinct().Count() == 1 ? 50 : 0;
         }
 
         private static int CalculateChance(int[] dice)
@@ -124,145 +128,49 @@
 
         private static int CalculateFullHouse(int[] dice)
         {
-            int score = 0;
-            int[] sortedDice = dice.OrderBy(d => d).ToArray();
-            if (sortedDice[0] == sortedDice[1] && sortedDice[3] == sortedDice[4] && (sortedDice[2] == sortedDice[1] || sortedDice[2] == sortedDice[3]))
-            {
-                score = dice.Sum();
-            }
-            return score;
+            var groups = dice.GroupBy(d => d).OrderByDescending(g => g.Count()).ToList();
+            return groups.Count == 2 && (groups[0].Count() == 3 || groups[1].Count() == 3) ? dice.Sum() : 0;
         }
 
         private static int CalculateLargeStraight(int[] dice)
         {
-            int score = 0;
-            int[] sortedDice = dice.OrderBy(d => d).ToArray();
-            if (sortedDice[0] == 2 && sortedDice[1] == 3 && sortedDice[2] == 4 && sortedDice[3] == 5 && sortedDice[4] == 6)
-            {
-                score = 20;
-            }
-            return score;
+            int[] largeStraight = { 2, 3, 4, 5, 6 };
+            return dice.OrderBy(d => d).SequenceEqual(largeStraight) ? 20 : 0;
         }
 
         private static int CalculateSmallStraight(int[] dice)
         {
-            int score = 0;
-            int[] sortedDice = dice.OrderBy(d => d).ToArray();
-            if (sortedDice[0] == 1 && sortedDice[1] == 2 && sortedDice[2] == 3 && sortedDice[3] == 4 && sortedDice[4] == 5)
-            {
-                score = 15;
-            }
-            return score;
+            int[] smallStraight = { 1, 2, 3, 4, 5 };
+            return dice.OrderBy(d => d).SequenceEqual(smallStraight) ? 15 : 0;
         }
 
         private static int CalculateFourOfAKind(int[] dice)
         {
-            int score = 0;
-            for (int i = 6; i > 0; i--)
-            {
-                int count = 0;
-                foreach (int die in dice)
-                {
-                    if (die == i)
-                    {
-                        count++;
-                    }
-                }
-                if (count >= 4)
-                {
-                    score = i * 4;
-                    break;
-                }
-            }
-            return score;
+            var groups = dice.GroupBy(d => d).FirstOrDefault(g => g.Count() >= 4);
+            return groups != null ? groups.Key * 4 : 0;
         }
 
         private static int CalculateThreeOfAKind(int[] dice)
         {
-            int score = 0;
-            for (int i = 6; i > 0; i--)
-            {
-                int count = 0;
-                foreach (int die in dice)
-                {
-                    if (die == i)
-                    {
-                        count++;
-                    }
-                }
-                if (count >= 3)
-                {
-                    score = i * 3;
-                    break;
-                }
-            }
-            return score;
+            var groups = dice.GroupBy(d => d).FirstOrDefault(g => g.Count() >= 3);
+            return groups != null ? groups.Key * 3 : 0;
         }
 
         private static int CalculateTwoPairs(int[] dice)
         {
-            int score = 0;
-            int pairCount = 0;
-            for (int i = 6; i > 0; i--)
-            {
-                int count = 0;
-                foreach (int die in dice)
-                {
-                    if (die == i)
-                    {
-                        count++;
-                    }
-                }
-                if (count >= 2)
-                {
-                    score += i * 2;
-                    pairCount++;
-                }
-                if (pairCount == 2)
-                {
-                    break;
-                }
-            }
-            if (pairCount < 2)
-            {
-                score = 0;
-            }
-            return score;
+            var pairs = dice.GroupBy(d => d).Where(g => g.Count() >= 2).Take(2).ToList();
+            return pairs.Count == 2 ? pairs.Sum(p => p.Key * 2) : 0;
         }
 
         private static int CalculateOnePair(int[] dice)
         {
-            int score = 0;
-            for (int i = 6; i > 0; i--)
-            {
-                int count = 0;
-                foreach (int die in dice)
-                {
-                    if (die == i)
-                    {
-                        count++;
-                    }
-                }
-                if (count >= 2)
-                {
-                    score = i * 2;
-                    break;
-                }
-            }
-            return score;
+            var pair = dice.GroupBy(d => d).FirstOrDefault(g => g.Count() >= 2);
+            return pair != null ? pair.Key * 2 : 0;
         }
 
         private static int CalculateNumberScore(int[] dice, int v)
         {
-            int score = 0;
-            foreach (int die in dice)
-            {
-                if (die == v)
-                {
-                    score += v;
-                }
-            }
-            return score;
+            return dice.Where(d => d == v).Sum();
         }
     }
 }

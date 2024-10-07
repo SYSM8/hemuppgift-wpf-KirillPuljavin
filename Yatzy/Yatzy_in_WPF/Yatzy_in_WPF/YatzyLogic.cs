@@ -74,6 +74,7 @@ namespace Yatzy_in_WPF
         public static class GameManager
         {
             public static List<Player> Players { get; set; } = new List<Player>();
+            public static int[] diceValues = new int[5];
             public static int currentPlayerIndex = 0;
             public const int WinningScore = 100;
             public const int BonusThreshold = 63;
@@ -87,17 +88,6 @@ namespace Yatzy_in_WPF
                 {
                     Players.Add(new Player($"Player {i + 1}"));
                 }
-            }
-
-            public static int[] RollDice()
-            {
-                Random random = new Random();
-                int[] dice = new int[5];
-                for (int i = 0; i < 5; i++)
-                {
-                    dice[i] = random.Next(1, 7);
-                }
-                return dice;
             }
 
             public static void OnScoreButtonClick(int[] dice, int category)

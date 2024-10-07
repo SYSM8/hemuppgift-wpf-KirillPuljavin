@@ -88,6 +88,24 @@ namespace Yatzy_in_WPF.Pages
             }
         }
 
+        private void ScoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is string tagValue && int.TryParse(tagValue, out int category))
+            {
+                int score = GameManager.CalculateScore(category);
+                if (Players[CurrentPlayerIndex].ScoreCard[category] == 0)
+                {
+                    Players[CurrentPlayerIndex].ScoreCard[category] = score;
+                    Players[CurrentPlayerIndex].TotalScore += score;
+                }
+
+                GameManager.CalculateBonus(Players[CurrentPlayerIndex]);
+                Players[CurrentPlayerIndex].GrandTotal = Players[CurrentPlayerIndex].TotalScore + Players[CurrentPlayerIndex].TotalBonus;
+
+                MessageBox.Show("Cat: " + category + " | Player: " + Players[CurrentPlayerIndex].Name);
+                GameManager.EndTurn();
+            }
+        }
     }
 
     public class DiceState : INotifyPropertyChanged

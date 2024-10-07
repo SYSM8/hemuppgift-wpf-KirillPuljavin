@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using static Yatzy_in_WPF.YatzyLogic;
@@ -38,16 +40,24 @@ namespace Yatzy_in_WPF.Pages
             // Update each dice with a random image, rotation, and offset
             for (int i = 0; i < DiceStates.Count; i++)
             {
-                int newDice = random.Next(1, 7);
-                YatzyLogic.GameManager.diceValues[i] = newDice;
+                if (!DiceStates[i].Fixed)
+                {
+                    int newDice = random.Next(1, 7);
+                    YatzyLogic.GameManager.diceValues[i] = newDice;
 
-                double angle = random.NextDouble() * 90;
-                double offsetX = random.Next(-10, 11);
+                    double angle = random.NextDouble() * 90;
+                    double offsetX = random.Next(-20, 20);
 
-                DiceStates[i].ImagePath = $"pack://application:,,,/imgs/dice{newDice}.png";
-                DiceStates[i].Angle = angle;
-                DiceStates[i].OffsetX = offsetX;
+                    DiceStates[i].ImagePath = $"pack://application:,,,/imgs/dice{newDice}.png";
+                    DiceStates[i].Angle = angle;
+                    DiceStates[i].OffsetX = offsetX;
+                }
             }
+        }
+        private void ToggleFixed(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is DiceState diceState)
+                diceState.Fixed = !diceState.Fixed;
         }
 
         private void ListView_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -80,11 +90,12 @@ namespace Yatzy_in_WPF.Pages
 
     }
 
-    public class DiceState : System.ComponentModel.INotifyPropertyChanged
+    public class DiceState : INotifyPropertyChanged
     {
         private string _imagePath;
         private double _angle;
         private double _offsetX;
+        private bool _fixed;
 
         public string ImagePath
         {
@@ -95,7 +106,6 @@ namespace Yatzy_in_WPF.Pages
                 OnPropertyChanged();
             }
         }
-
         public double Angle
         {
             get => _angle;
@@ -105,7 +115,6 @@ namespace Yatzy_in_WPF.Pages
                 OnPropertyChanged();
             }
         }
-
         public double OffsetX
         {
             get => _offsetX;
@@ -115,19 +124,20 @@ namespace Yatzy_in_WPF.Pages
                 OnPropertyChanged();
             }
         }
-
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        public bool Fixed
         {
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            get => _fixed;
+            set
+            {
+                _fixed = value;
+                OnPropertyChanged();
+            }
         }
-
-        // Helper method to trigger PropertyChanged for all properties (to refresh bindings).
-        public void Refresh()
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            OnPropertyChanged(nameof(ImagePath));
-            OnPropertyChanged(nameof(Angle));
-            OnPropertyChanged(nameof(OffsetX));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
 }

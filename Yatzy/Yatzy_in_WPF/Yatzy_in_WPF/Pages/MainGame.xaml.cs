@@ -9,8 +9,9 @@ namespace Yatzy_in_WPF.Pages
 {
     public partial class MainGame : Page
     {
-        public ObservableCollection<DiceState> DiceStates { get; set; } = new ObservableCollection<DiceState>();
+        public ObservableCollection<DiceState> DiceStates { get; set; } = [];
         public ObservableCollection<YatzyLogic.Player> Players { get; set; }
+
 
         public MainGame()
         {
@@ -81,20 +82,23 @@ namespace Yatzy_in_WPF.Pages
         {
             if (sender is Button button && button.Tag is string tagValue && int.TryParse(tagValue, out int category))
             {
-                int score = GameManager.CalculateScore(category);
-                if (Players[CurrentPlayerIndex].ScoreCard[category] == 0)
+                if (Players[CurrentPlayerIndex].IsCategoryScored[category] == false)
                 {
+                    int score = GameManager.CalculateScore(category);
+                    Players[CurrentPlayerIndex].IsCategoryScored[category] = true;
+                    if (category < 6)
+                    {
+                        GameManager.CalculateBonus(Players[CurrentPlayerIndex]);
+                    }
                     Players[CurrentPlayerIndex].ScoreCard[category] = score;
                     Players[CurrentPlayerIndex].TotalScore += score;
-                    Players[CurrentPlayerIndex].IsCategoryScored[category] = true; // Mark category as scored
-
-                    GameManager.CalculateBonus(Players[CurrentPlayerIndex]);
                     Players[CurrentPlayerIndex].GrandTotal = Players[CurrentPlayerIndex].TotalScore + Players[CurrentPlayerIndex].Bonus;
-                }
 
-                MessageBox.Show($"Category: {category} | Player: {Players[CurrentPlayerIndex].Name} scored {score}");
-                GameManager.EndTurn();
+                    MessageBox.Show($"Category: {category} | Player: {Players[CurrentPlayerIndex].Name} scored {score}");
+                    GameManager.EndTurn();
+                }
             }
+
         }
     }
 

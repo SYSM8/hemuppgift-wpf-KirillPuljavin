@@ -26,6 +26,7 @@ namespace Yatzy_in_WPF
         public class Player : INotifyPropertyChanged
         {
             private string _name;
+            private int _upperScore;
             private int _totalScore;
             private int _totalBonus;
             private int _grandTotal;
@@ -37,6 +38,15 @@ namespace Yatzy_in_WPF
                 set
                 {
                     _name = value;
+                    OnPropertyChanged();
+                }
+            }
+            public int UpperScore
+            {
+                get => _upperScore;
+                set
+                {
+                    _upperScore = value;
                     OnPropertyChanged();
                 }
             }
@@ -80,7 +90,7 @@ namespace Yatzy_in_WPF
                 Name = name;
                 ScoreCard = new ObservableCollection<int>(new int[15]);
                 IsCategoryScored = new ObservableCollection<bool>(new bool[15]);
-
+                ScoreCard.CollectionChanged += (s, e) => UpperScore = ScoreCard.Take(6).Sum();
             }
 
             public event PropertyChangedEventHandler PropertyChanged;

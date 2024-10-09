@@ -36,7 +36,7 @@
         <!--  Content Segment  -->
         <Grid Grid.Row="1" Background="Beige">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
 
@@ -117,6 +117,8 @@
                 BorderBrush="Gray"
                 BorderThickness="1"
                 ItemsSource="{Binding Players}"
+                ScrollViewer.CanContentScroll="False"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 SizeChanged="ListView_SizeChanged">
 
                 <ListView.ItemContainerStyle>
@@ -158,7 +160,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Twos">
+                        <GridViewColumn Header="Twos">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -174,7 +176,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Threes">
+                        <GridViewColumn Header="Threes">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -190,7 +192,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Fours">
+                        <GridViewColumn Header="Fours">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -206,7 +208,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Fives">
+                        <GridViewColumn Header="Fives">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -222,7 +224,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Sixes">
+                        <GridViewColumn Header="Sixes">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -245,13 +247,13 @@
                                     <Label
                                         HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
-                                        Content="{Binding TotalScore}" />
+                                        Content="{Binding UpperScore}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
                         <!--  BONUS  -->
-                        <GridViewColumn Width="Auto" Header="Bonus">
+                        <GridViewColumn Header="Bonus">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Label
@@ -262,7 +264,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="One Pair">
+                        <GridViewColumn Header="One Pair">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -278,7 +280,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Two Pairs">
+                        <GridViewColumn Header="Two Pairs">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -294,7 +296,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Three of a Kind">
+                        <GridViewColumn Header="Three of a Kind">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -310,7 +312,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Four of a Kind">
+                        <GridViewColumn Header="Four of a Kind">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -326,7 +328,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Full House">
+                        <GridViewColumn Header="Full House">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -342,7 +344,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Small Straight">
+                        <GridViewColumn Header="Small Straight">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -358,7 +360,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Large Straight">
+                        <GridViewColumn Header="Large Straight">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -374,7 +376,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Chance">
+                        <GridViewColumn Header="Chance">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -390,7 +392,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Width="Auto" Header="Yatzy">
+                        <GridViewColumn Header="Yatzy">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button

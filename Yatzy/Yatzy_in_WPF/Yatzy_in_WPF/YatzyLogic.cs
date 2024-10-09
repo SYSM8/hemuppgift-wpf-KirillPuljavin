@@ -51,16 +51,6 @@ namespace Yatzy_in_WPF
                 }
             }
 
-            public int TotalBonus
-            {
-                get => _totalBonus;
-                set
-                {
-                    _totalBonus = value;
-                    OnPropertyChanged();
-                }
-            }
-
             public int GrandTotal
             {
                 get => _grandTotal;
@@ -81,12 +71,16 @@ namespace Yatzy_in_WPF
                 }
             }
 
-            public int[] ScoreCard { get; set; }
+            public ObservableCollection<int> ScoreCard { get; set; }
+            public ObservableCollection<bool> IsCategoryScored { get; set; }
+
 
             public Player(string name)
             {
                 Name = name;
-                ScoreCard = new int[15];
+                ScoreCard = new ObservableCollection<int>(new int[15]);
+                IsCategoryScored = new ObservableCollection<bool>(new bool[15]);
+
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
@@ -113,7 +107,6 @@ namespace Yatzy_in_WPF
 
             public static void EndTurn()
             {
-                // Check if any player has won
                 if (Players[CurrentPlayerIndex].GrandTotal >= WinningScore)
                 {
                     System.Windows.MessageBox.Show($"Game Over! {Players[CurrentPlayerIndex].Name} wins!");
@@ -127,11 +120,10 @@ namespace Yatzy_in_WPF
 
             public static void CalculateBonus(Player player)
             {
-                int upperSectionScore = player.ScoreCard.Take(6).Sum();
+                int upperSectionScore = player.ScoreCard[0] + player.ScoreCard[1] + player.ScoreCard[2] + player.ScoreCard[3] + player.ScoreCard[4] + player.ScoreCard[5];
                 if (upperSectionScore >= BonusThreshold && player.Bonus == 0)
                 {
                     player.Bonus = BonusPoints;
-                    player.TotalBonus = player.Bonus;
                 }
             }
 
@@ -140,35 +132,38 @@ namespace Yatzy_in_WPF
                 int score = 0;
                 switch (category)
                 {
-                    case 1:
+                    case 0:
                         score = CalculateNumberScore(1);
                         break;
-                    case 2:
+                    case 1:
                         score = CalculateNumberScore(2);
                         break;
-                    case 3:
+                    case 2:
                         score = CalculateNumberScore(3);
                         break;
-                    case 4:
+                    case 3:
                         score = CalculateNumberScore(4);
                         break;
-                    case 5:
+                    case 4:
                         score = CalculateNumberScore(5);
                         break;
-                    case 6:
+                    case 5:
                         score = CalculateNumberScore(6);
                         break;
-                    case 7:
+                    case 6:
                         score = CalculateOnePair();
                         break;
-                    case 8:
+                    case 7:
                         score = CalculateTwoPairs();
                         break;
-                    case 9:
+                    case 8:
                         score = CalculateThreeOfAKind();
                         break;
-                    case 10:
+                    case 9:
                         score = CalculateFourOfAKind();
+                        break;
+                    case 10:
+                        score = CalculateFullHouse();
                         break;
                     case 11:
                         score = CalculateSmallStraight();
@@ -177,12 +172,9 @@ namespace Yatzy_in_WPF
                         score = CalculateLargeStraight();
                         break;
                     case 13:
-                        score = CalculateFullHouse();
-                        break;
-                    case 14:
                         score = CalculateChance();
                         break;
-                    case 15:
+                    case 14:
                         score = CalculateYatzy();
                         break;
                 }
@@ -191,59 +183,177 @@ namespace Yatzy_in_WPF
 
             private static int CalculateNumberScore(int number)
             {
-                return diceValues.Where(d => d == number).Sum();
+                int score = 0;
+                foreach (int dice in diceValues)
+                {
+                    if (dice == number)
+                    {
+                        score += number;
+                    }
+                }
+                return score;
             }
 
             private static int CalculateOnePair()
             {
-                var pair = diceValues.GroupBy(d => d).Where(g => g.Count() >= 2).OrderByDescending(g => g.Key).FirstOrDefault();
-                return pair != null ? pair.Key * 2 : 0;
+                int[] counts = new int[7];
+
+                foreach (int dice in diceValues)
+                {
+                    counts[dice]++;
+                }
+
+                for (int i = 6; i >= 1; i--)
+                {
+                    if (counts[i] >= 2)
+                    {
+                        return i * 2;
+                    }
+                }
+                return 0;
             }
+
 
             private static int CalculateTwoPairs()
             {
-                var pairs = diceValues.GroupBy(d => d).Where(g => g.Count() >= 2).OrderByDescending(g => g.Key).Take(2).ToList();
-                return pairs.Count == 2 ? pairs.Sum(p => p.Key * 2) : 0;
+                int pairsFound = 0;
+                int score = 0;
+                for (int i = 6; i >= 1; i--)
+                {
+                    int count = 0;
+                    foreach (int dice in diceValues)
+                    {
+                        if (dice == i)
+                        {
+                            count++;
+                        }
+                    }
+                    if (count >= 2)
+                    {
+                        score += i * 2;
+                        pairsFound++;
+                    }
+                    if (pairsFound == 2)
+                    {
+                        break;
+                    }
+                }
+                return pairsFound == 2 ? score : 0;
             }
 
             private static int CalculateThreeOfAKind()
             {
-                var threeOfAKind = diceValues.GroupBy(d => d).FirstOrDefault(g => g.Count() >= 3);
-                return threeOfAKind != null ? threeOfAKind.Key * 3 : 0;
+                for (int i = 6; i >= 1; i--)
+                {
+                    int count = 0;
+                    foreach (int dice in diceValues)
+                    {
+                        if (dice == i)
+                        {
+                            count++;
+                        }
+                    }
+                    if (count >= 3)
+                    {
+                        return i * 3;
+                    }
+                }
+                return 0;
             }
 
             private static int CalculateFourOfAKind()
             {
-                var fourOfAKind = diceValues.GroupBy(d => d).FirstOrDefault(g => g.Count() >= 4);
-                return fourOfAKind != null ? fourOfAKind.Key * 4 : 0;
+                for (int i = 1; i <= 6; i++)
+                {
+                    int count = 0;
+                    foreach (int dice in diceValues)
+                    {
+                        if (dice == i)
+                        {
+                            count++;
+                        }
+                    }
+                    if (count >= 4)
+                    {
+                        return i * 4;
+                    }
+                }
+                return 0;
             }
 
             private static int CalculateFullHouse()
             {
-                var groups = diceValues.GroupBy(d => d).OrderByDescending(g => g.Count()).ToList();
-                return groups.Count == 2 && (groups[0].Count() == 3 || groups[1].Count() == 3) ? diceValues.Sum() : 0;
+                int threeOfAKindValue = 0;
+                int pairValue = 0;
+                for (int i = 6; i >= 1; i--)
+                {
+                    int count = 0;
+                    foreach (int dice in diceValues)
+                    {
+                        if (dice == i)
+                        {
+                            count++;
+                        }
+                    }
+                    if (count == 3)
+                    {
+                        threeOfAKindValue = i * 3;
+                    }
+                    else if (count == 2)
+                    {
+                        pairValue = i * 2;
+                    }
+                }
+                return (threeOfAKindValue > 0 && pairValue > 0) ? (threeOfAKindValue + pairValue) : 0;
             }
 
             private static int CalculateSmallStraight()
             {
                 int[] smallStraight = { 1, 2, 3, 4, 5 };
-                return diceValues.OrderBy(d => d).SequenceEqual(smallStraight) ? 15 : 0;
+                foreach (int value in smallStraight)
+                {
+                    if (!diceValues.Contains(value))
+                    {
+                        return 0;
+                    }
+                }
+                return 15;
             }
 
             private static int CalculateLargeStraight()
             {
                 int[] largeStraight = { 2, 3, 4, 5, 6 };
-                return diceValues.OrderBy(d => d).SequenceEqual(largeStraight) ? 20 : 0;
+                foreach (int value in largeStraight)
+                {
+                    if (!diceValues.Contains(value))
+                    {
+                        return 0;
+                    }
+                }
+                return 20;
             }
 
             private static int CalculateYatzy()
             {
-                return diceValues.Distinct().Count() == 1 ? 50 : 0;
+                int firstValue = diceValues[0];
+                foreach (int dice in diceValues)
+                {
+                    if (dice != firstValue)
+                    {
+                        return 0;
+                    }
+                }
+                return 50;
             }
 
             private static int CalculateChance()
             {
-                return diceValues.Sum();
+                int score = 0;
+                foreach (int dice in diceValues)
+                {
+                    score += dice;
+                }
+                return score;
             }
         }
     }

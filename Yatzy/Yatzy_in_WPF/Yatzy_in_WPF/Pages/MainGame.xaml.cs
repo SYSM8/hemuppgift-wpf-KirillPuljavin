@@ -64,29 +64,18 @@ namespace Yatzy_in_WPF.Pages
         {
             if (ScoreGridView == null) return;
             double totalWidth = e.NewSize.Width;
-            double playerNameWidth = totalWidth * 0.15;  // 15% for Player Name column
-            double doublesWidth = totalWidth * 0.1;      // 10% for Doubles column
-            double threeOfAKindWidth = totalWidth * 0.1; // 10% for Three of a Kind column
-            double totalScoreWidth = totalWidth * 0.1;   // 10% for Total Score column
+            int columnsCount = ScoreGridView.Columns.Count;
 
-            ScoreGridView.Columns[0].Width = playerNameWidth;
-            ScoreGridView.Columns[1].Width = doublesWidth;
-            ScoreGridView.Columns[2].Width = threeOfAKindWidth;
-            ScoreGridView.Columns[^1].Width = totalScoreWidth;
-
-            // Distribute remaining space for other columns.
-            double remainingWidth = totalWidth - (playerNameWidth + doublesWidth + threeOfAKindWidth + totalScoreWidth);
-            int otherColumnsCount = ScoreGridView.Columns.Count - 4;
-
-            if (otherColumnsCount > 0)
+            if (columnsCount > 1)
             {
-                double otherColumnWidth = remainingWidth / otherColumnsCount;
-                for (int i = 3; i < ScoreGridView.Columns.Count - 1; i++)
-                {
+                double otherColumnWidth = totalWidth / (columnsCount + 1);  // +1 for doubling the Player Name column
+                ScoreGridView.Columns[0].Width = otherColumnWidth * 2;
+                for (int i = 1; i < columnsCount; i++)
                     ScoreGridView.Columns[i].Width = otherColumnWidth;
-                }
             }
         }
+
+
 
         private void ScoreButton_Click(object sender, RoutedEventArgs e)
         {
@@ -97,12 +86,13 @@ namespace Yatzy_in_WPF.Pages
                 {
                     Players[CurrentPlayerIndex].ScoreCard[category] = score;
                     Players[CurrentPlayerIndex].TotalScore += score;
+                    Players[CurrentPlayerIndex].IsCategoryScored[category] = true; // Mark category as scored
+
+                    GameManager.CalculateBonus(Players[CurrentPlayerIndex]);
+                    Players[CurrentPlayerIndex].GrandTotal = Players[CurrentPlayerIndex].TotalScore + Players[CurrentPlayerIndex].Bonus;
                 }
 
-                GameManager.CalculateBonus(Players[CurrentPlayerIndex]);
-                Players[CurrentPlayerIndex].GrandTotal = Players[CurrentPlayerIndex].TotalScore + Players[CurrentPlayerIndex].TotalBonus;
-
-                MessageBox.Show("Cat: " + category + " | Player: " + Players[CurrentPlayerIndex].Name);
+                MessageBox.Show($"Category: {category} | Player: {Players[CurrentPlayerIndex].Name} scored {score}");
                 GameManager.EndTurn();
             }
         }

@@ -10,6 +10,11 @@
     d:DesignWidth="1920"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <local:ScoreColorConverter x:Key="ScoreColorConverter" />
+    </Page.Resources>
+
     <Grid Background="Beige">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -134,11 +139,10 @@
 
                 <ListView.View>
                     <GridView x:Name="ScoreGridView">
-                        <GridViewColumn
-                            Width="100"
-                            DisplayMemberBinding="{Binding Name}"
-                            Header="Player Name" />
-                        <GridViewColumn Width="Auto" Header="Doubles">
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Player Name" />
+
+                        <!--  UPPER SECTION  -->
+                        <GridViewColumn Header="Ones">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
@@ -147,101 +151,269 @@
                                         VerticalContentAlignment="Center"
                                         Click="ScoreButton_Click"
                                         Content="{Binding Path=ScoreCard[0]}"
+                                        Foreground="{Binding Path=IsCategoryScored[0], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[0], Converter={StaticResource InverseBooleanConverter}}"
                                         Tag="0" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="Auto" Header="Three of a Kind">
+
+                        <GridViewColumn Width="Auto" Header="Twos">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
+                                        x:Name="ScoreButton"
                                         HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Click="ScoreButton_Click"
                                         Content="{Binding Path=ScoreCard[1]}"
+                                        Foreground="{Binding Path=IsCategoryScored[1], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[1], Converter={StaticResource InverseBooleanConverter}}"
                                         Tag="1" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="Auto" Header="Four of a Kind">
+
+                        <GridViewColumn Width="Auto" Header="Threes">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
+                                        x:Name="ScoreButton"
                                         HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Click="ScoreButton_Click"
                                         Content="{Binding Path=ScoreCard[2]}"
+                                        Foreground="{Binding Path=IsCategoryScored[2], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[2], Converter={StaticResource InverseBooleanConverter}}"
                                         Tag="2" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="Auto" Header="Full House">
+
+                        <GridViewColumn Width="Auto" Header="Fours">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
+                                        x:Name="ScoreButton"
                                         HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Click="ScoreButton_Click"
                                         Content="{Binding Path=ScoreCard[3]}"
+                                        Foreground="{Binding Path=IsCategoryScored[3], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[3], Converter={StaticResource InverseBooleanConverter}}"
                                         Tag="3" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="Auto" Header="Small Straight">
+
+                        <GridViewColumn Width="Auto" Header="Fives">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
+                                        x:Name="ScoreButton"
                                         HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Click="ScoreButton_Click"
                                         Content="{Binding Path=ScoreCard[4]}"
+                                        Foreground="{Binding Path=IsCategoryScored[4], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[4], Converter={StaticResource InverseBooleanConverter}}"
                                         Tag="4" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="Auto" Header="Large Straight">
+
+                        <GridViewColumn Width="Auto" Header="Sixes">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
+                                        x:Name="ScoreButton"
                                         HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Click="ScoreButton_Click"
                                         Content="{Binding Path=ScoreCard[5]}"
+                                        Foreground="{Binding Path=IsCategoryScored[5], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[5], Converter={StaticResource InverseBooleanConverter}}"
                                         Tag="5" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="Auto" Header="Yatzy">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Click="ScoreButton_Click"
-                                        Content="{Binding Path=ScoreCard[6]}"
-                                        Tag="6" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="Auto" Header="Chance">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Click="ScoreButton_Click"
-                                        Content="{Binding Path=ScoreCard[7]}"
-                                        Tag="7" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="Auto" Header="TotalScore">
+
+                        <!--  TOTAL SCORE  -->
+                        <GridViewColumn Header="TotalScore">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Label
                                         HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Content="{Binding TotalScore}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <!--  BONUS  -->
+                        <GridViewColumn Width="Auto" Header="Bonus">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Content="{Binding Bonus}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="Auto" Header="One Pair">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="ScoreButton"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Click="ScoreButton_Click"
+                                        Content="{Binding Path=ScoreCard[6]}"
+                                        Foreground="{Binding Path=IsCategoryScored[6], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[6], Converter={StaticResource InverseBooleanConverter}}"
+                                        Tag="6" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="Auto" Header="Two Pairs">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="ScoreButton"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Click="ScoreButton_Click"
+                                        Content="{Binding Path=ScoreCard[7]}"
+                                        Foreground="{Binding Path=IsCategoryScored[7], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[7], Converter={StaticResource InverseBooleanConverter}}"
+                                        Tag="7" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="Auto" Header="Three of a Kind">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="ScoreButton"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Click="ScoreButton_Click"
+                                        Content="{Binding Path=ScoreCard[8]}"
+                                        Foreground="{Binding Path=IsCategoryScored[8], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[8], Converter={StaticResource InverseBooleanConverter}}"
+                                        Tag="8" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="Auto" Header="Four of a Kind">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="ScoreButton"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Click="ScoreButton_Click"
+                                        Content="{Binding Path=ScoreCard[9]}"
+                                        Foreground="{Binding Path=IsCategoryScored[9], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[9], Converter={StaticResource InverseBooleanConverter}}"
+                                        Tag="9" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="Auto" Header="Full House">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="ScoreButton"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Click="ScoreButton_Click"
+                                        Content="{Binding Path=ScoreCard[10]}"
+                                        Foreground="{Binding Path=IsCategoryScored[10], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[10], Converter={StaticResource InverseBooleanConverter}}"
+                                        Tag="10" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="Auto" Header="Small Straight">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="ScoreButton"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Click="ScoreButton_Click"
+                                        Content="{Binding Path=ScoreCard[11]}"
+                                        Foreground="{Binding Path=IsCategoryScored[11], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[11], Converter={StaticResource InverseBooleanConverter}}"
+                                        Tag="11" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="Auto" Header="Large Straight">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="ScoreButton"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Click="ScoreButton_Click"
+                                        Content="{Binding Path=ScoreCard[12]}"
+                                        Foreground="{Binding Path=IsCategoryScored[12], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[12], Converter={StaticResource InverseBooleanConverter}}"
+                                        Tag="12" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="Auto" Header="Chance">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="ScoreButton"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Click="ScoreButton_Click"
+                                        Content="{Binding Path=ScoreCard[13]}"
+                                        Foreground="{Binding Path=IsCategoryScored[13], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[13], Converter={StaticResource InverseBooleanConverter}}"
+                                        Tag="13" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="Auto" Header="Yatzy">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="ScoreButton"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Click="ScoreButton_Click"
+                                        Content="{Binding Path=ScoreCard[14]}"
+                                        Foreground="{Binding Path=IsCategoryScored[14], Converter={StaticResource ScoreColorConverter}}"
+                                        IsEnabled="{Binding Path=IsCategoryScored[14], Converter={StaticResource InverseBooleanConverter}}"
+                                        Tag="14" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <!--  Grand Total Row  -->
+                        <GridViewColumn Width="Auto" Header="Grand Total">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Content="{Binding GrandTotal}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

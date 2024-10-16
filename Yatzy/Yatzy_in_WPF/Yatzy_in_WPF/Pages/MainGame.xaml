@@ -10,9 +10,11 @@
     d:DesignWidth="1920"
     mc:Ignorable="d">
 
+    <!--  REQUIRED  -->
     <Page.Resources>
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <local:ScoreColorConverter x:Key="ScoreColorConverter" />
+        <SolidColorBrush x:Key="ListViewItemBackgroundBrush" Color="Transparent" />
     </Page.Resources>
 
     <Grid Background="Beige">
@@ -128,14 +130,6 @@
                         <Setter Property="HorizontalAlignment" Value="Center" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                         <Setter Property="Background" Value="Transparent" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True">
-                                <Setter Property="Background" Value="LightBlue" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="False">
-                                <Setter Property="Background" Value="Transparent" />
-                            </DataTrigger>
-                        </Style.Triggers>
                     </Style>
                 </ListView.ItemContainerStyle>
 

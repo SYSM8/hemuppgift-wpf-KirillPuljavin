@@ -10,5 +10,89 @@
     d:DesignWidth="1920"
     mc:Ignorable="d">
 
-    <Grid />
+    <Grid Background="#F0F0F0">
+        <!--  Define Row and Column structure  -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+
+        <!--  Welcome text  -->
+        <TextBlock
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="70"
+            FontWeight="Bold"
+            Foreground="#333333"
+            Text="Welcome to Yatzy" />
+
+        <!--  Buttons section  -->
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+
+            <Button
+                Width="500"
+                Height="100"
+                Margin="10,30"
+                Background="#007ACC"
+                BorderBrush="#005A9E"
+                BorderThickness="2"
+                Click="StartGameButton_Click"
+                Content="Start Game"
+                FontSize="50"
+                FontWeight="SemiBold"
+                Foreground="White">
+                <Button.Effect>
+                    <DropShadowEffect
+                        BlurRadius="10"
+                        Opacity="0.4"
+                        ShadowDepth="4" />
+                </Button.Effect>
+            </Button>
+            <Button
+                Width="500"
+                Height="100"
+                Margin="10,30"
+                Background="#007ACC"
+                BorderBrush="#005A9E"
+                BorderThickness="2"
+                Click="HighScoresButton_Click"
+                Content="High Scores"
+                FontSize="50"
+                FontWeight="SemiBold"
+                Foreground="White">
+                <Button.Effect>
+                    <DropShadowEffect
+                        BlurRadius="10"
+                        Opacity="0.4"
+                        ShadowDepth="4" />
+                </Button.Effect>
+            </Button>
+            <Button
+                Width="500"
+                Height="100"
+                Margin="10,30"
+                Background="#D32F2F"
+                BorderBrush="#B71C1C"
+                BorderThickness="2"
+                Click="ExitButton_Click"
+                Content="Exit"
+                FontSize="50"
+                FontWeight="SemiBold"
+                Foreground="White">
+                <Button.Effect>
+                    <DropShadowEffect
+                        BlurRadius="10"
+                        Opacity="0.4"
+                        ShadowDepth="4" />
+                </Button.Effect>
+            </Button>
+        </StackPanel>
+    </Grid>
 </Page>

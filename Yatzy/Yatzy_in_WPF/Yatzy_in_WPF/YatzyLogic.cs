@@ -125,7 +125,6 @@ namespace Yatzy_in_WPF
 
                 // Move to the next player
                 CurrentPlayerIndex = (CurrentPlayerIndex + 1) % Players.Count;
-                System.Windows.MessageBox.Show($"It's {Players[CurrentPlayerIndex].Name}'s turn!");
             }
 
             public static void CalculateBonus(Player player)

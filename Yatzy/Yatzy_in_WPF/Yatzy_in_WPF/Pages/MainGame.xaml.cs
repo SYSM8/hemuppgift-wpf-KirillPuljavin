@@ -94,7 +94,6 @@ namespace Yatzy_in_WPF.Pages
                     Players[CurrentPlayerIndex].TotalScore += score;
                     Players[CurrentPlayerIndex].GrandTotal = Players[CurrentPlayerIndex].TotalScore + Players[CurrentPlayerIndex].Bonus;
 
-                    MessageBox.Show($"Category: {category} | Player: {Players[CurrentPlayerIndex].Name} scored {score}");
                     GameManager.EndTurn();
                 }
             }

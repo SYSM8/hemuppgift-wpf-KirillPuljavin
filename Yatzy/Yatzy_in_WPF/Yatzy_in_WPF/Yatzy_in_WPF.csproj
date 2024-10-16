@@ -26,4 +26,8 @@
     <Resource Include="imgs\dice6.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\" />
+  </ItemGroup>
+
 </Project>
